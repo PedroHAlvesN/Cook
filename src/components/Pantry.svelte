@@ -1,27 +1,22 @@
 <script>
   import ingredientStore from "./Stores/ingredientStore";
 
-  let ingredients = [];
   let editando = false;
 
-  ingredientStore.subscribe((data) => {
-    ingredients = data;
-  });
-
-  const obterId = (id) => {
+  /*const obterId = (id) => {
     const valid = ingredients.findIndex((ing) => (id = ing.id));
     console.log(valid);
-  };
+  };*/
 
   const editandoIngrediente = (evento) => {
     editando = true;
-    const novoIngrediente = document.getElementById("nome-ingrediente");
+    console.log(editando);
   };
 </script>
 
 <div id="pantry-container">
   <p>INGREDIENTES</p>
-  {#each ingredients as ing}
+  {#each $ingredientStore as ing}
     <div id="pantry">
       <p id="nome-ingrediente" on:dblclick={editandoIngrediente}>{ing.nome}</p>
     </div>
