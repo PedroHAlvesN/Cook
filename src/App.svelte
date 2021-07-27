@@ -5,7 +5,7 @@
 
   import Logo from "./components/Logo/Logo.svelte";
   import Pantry from "./components/Pantry.svelte";
-  import IngredientStore from "./components/Stores/IngredientStore";
+  import IngredientStore from "./components/Stores/ingredientStore";
 
   const idAleatório = (min, max) =>
     Math.round(Math.random() * (max - min) + min);

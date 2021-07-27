@@ -1,10 +1,10 @@
 <script>
-  import IngredientStore from "./Stores/IngredientStore";
+  import ingredientStore from "./Stores/ingredientStore";
 
   let ingredients = [];
   let editando = false;
 
-  IngredientStore.subscribe((data) => {
+  ingredientStore.subscribe((data) => {
     ingredients = data;
   });
 

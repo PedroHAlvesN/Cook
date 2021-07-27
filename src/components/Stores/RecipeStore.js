@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 
-const RecipeStore = writable([
+const recipeStore = writable([
   {
     nome: "Milho Cozido",
     ingredientes: {
@@ -15,5 +15,5 @@ const RecipeStore = writable([
   }
 ]);
 
-export default RecipeStore;
+export default recipeStore;
 
