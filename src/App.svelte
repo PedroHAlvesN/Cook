@@ -7,37 +7,9 @@
   import Pantry from "./components/Pantry.svelte";
   import IngredientStore from "./components/Stores/ingredientStore";
 
-  const idAleatório = (min, max) =>
-    Math.round(Math.random() * (max - min) + min);
-
-  let Recipes = [];
-
-  IngredientStore.subscribe((data) => {
-    Recipes = data;
-  });
-
   let visivel = false;
-  let editando = false;
 
-  const adicionarIngrediente = (evento) => {
-    const nomeIngrediente = evento.target.value;
-    if (evento.charCode === 13) {
-      evento.preventDefault();
-      IngredientStore.update(
-        (data) =>
-          (data = [
-            ...data,
-            {
-              id: idAleatório(1, 10000),
-              nome: nomeIngrediente,
-            },
-          ])
-      );
-      evento.target.value = "";
-    }
-  };
-
-  const mostraReceita = () => {
+  /*const mostraReceita = () => {
     const milho = false;
     const macarrao = false;
     for (let i = 0; i < Recipes.length; i++) {
@@ -45,7 +17,7 @@
         visivel = true;
       }
     }
-  };
+  };*/
 </script>
 
 <main>
@@ -54,19 +26,6 @@
       <Logo />
     </div>
     <h2>Cook Task</h2>
-  </div>
-  <div id="Add-container">
-    <Form>
-      <FormGroup>
-        <Label for="add-ingredientes">Adicionar Ingredientes</Label>
-        <Input
-          on:keypress={adicionarIngrediente}
-          type="text"
-          id="add-input"
-          placeholder="Ingrediente"
-        />
-      </FormGroup>
-    </Form>
   </div>
   <div id="kitchen-container">
     <Pantry />

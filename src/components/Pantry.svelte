@@ -1,25 +1,76 @@
 <script>
+  import { compute_rest_props, prop_dev } from "svelte/internal";
+
+  import { Input, Label } from "sveltestrap";
   import ingredientStore from "./Stores/ingredientStore";
+  import { idAleatório } from "./Stores/ingredientStore";
 
   let editando = false;
 
   /*const obterId = (id) => {
-    const valid = ingredients.findIndex((ing) => (id = ing.id));
+    const valid = ingredients.findIndex((ingredient) => (id = ingredient.id));
     console.log(valid);
   };*/
 
-  const editandoIngrediente = (evento) => {
-    editando = true;
-    console.log(editando);
+  const alteraIngrediente = (evento, ingid) => {
+    if (evento.charCode === 13) {
+      const novoNomeIngrediente = evento.target.value;
+      const newStore = $ingredientStore.map((ing) =>
+        ing.id === ingid
+          ? { id: ingid, nome: novoNomeIngrediente, editing: false }
+          : ing
+      );
+      ingredientStore.set(newStore);
+    }
+  };
+  const adicionarIngrediente = (evento) => {
+    const nomeIngrediente = evento.target.value;
+    if (evento.charCode === 13) {
+      evento.preventDefault();
+      $ingredientStore = [
+        ...$ingredientStore,
+        {
+          id: idAleatório(1, 10000),
+          nome: nomeIngrediente,
+          editing: false,
+        },
+      ];
+      evento.target.value = "";
+    }
   };
 </script>
 
+<div id="Add-container">
+  <Label for="add-ingredientes">Adicionar Ingredientes</Label>
+  <Input
+    on:keypress={adicionarIngrediente}
+    on:blur={() => (editando = false)}
+    type="text"
+    id="add-input"
+    placeholder="Ingrediente"
+  />
+</div>
 <div id="pantry-container">
   <p>INGREDIENTES</p>
-  {#each $ingredientStore as ing}
-    <div id="pantry">
-      <p id="nome-ingrediente" on:dblclick={editandoIngrediente}>{ing.nome}</p>
-    </div>
+  {#each $ingredientStore as ingredient}
+    {#if ingredient.editing}
+      <Input
+        on:keypress={(evento) => alteraIngrediente(evento, ingredient.id)}
+        type="text"
+        id="add-input"
+        placeholder="Ingrediente"
+        value={ingredient.nome}
+      />
+    {:else}
+      <div id="pantry">
+        <p
+          id="nome-ingrediente"
+          on:dblclick={() => (ingredient.editing = true)}
+        >
+          {ingredient.nome}
+        </p>
+      </div>
+    {/if}
   {/each}
 </div>
 
