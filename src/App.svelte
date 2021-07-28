@@ -1,11 +1,6 @@
 <script>
-  import { empty } from "svelte/internal";
-
-  import { Form, FormGroup, Input, Label } from "sveltestrap";
-
   import Logo from "./components/Logo/Logo.svelte";
   import Pantry from "./components/Pantry.svelte";
-  import IngredientStore from "./components/Stores/ingredientStore";
 
   let visivel = false;
 

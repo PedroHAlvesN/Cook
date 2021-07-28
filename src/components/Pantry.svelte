@@ -54,15 +54,18 @@
   <p>INGREDIENTES</p>
   {#each $ingredientStore as ingredient}
     {#if ingredient.editing}
-      <Input
-        on:keypress={(evento) => alteraIngrediente(evento, ingredient.id)}
-        type="text"
-        id="add-input"
-        placeholder="Ingrediente"
-        value={ingredient.nome}
-      />
+      <div class="pantry">
+        <Input
+          on:keypress={(evento) => alteraIngrediente(evento, ingredient.id)}
+          on:blur={() => (ingredient.editing = false)}
+          type="text"
+          id="add-input"
+          placeholder="Ingrediente"
+          value={ingredient.nome}
+        />
+      </div>
     {:else}
-      <div id="pantry">
+      <div class="pantry">
         <p
           id="nome-ingrediente"
           on:dblclick={() => (ingredient.editing = true)}
@@ -88,7 +91,7 @@
     border-bottom: 2px solid rgb(141, 70, 28);
   }
 
-  #pantry {
+  .pantry {
     display: flex;
     border-radius: 5px;
     border: 3px solid rgb(141, 70, 28);
@@ -96,6 +99,11 @@
     padding: 10px;
     margin: 5px;
     justify-content: space-between;
+  }
+
+  :global(.form-control),
+  .pantry > p {
+    margin: 0;
   }
 
   #pantry:hover {
