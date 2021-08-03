@@ -7,6 +7,7 @@ const ingredientStore = writable([
     {
       id: idAleatório(1, 1000),
       nome: "Milho",
+      quant: 2,
       editing: false
     },
   ]);
