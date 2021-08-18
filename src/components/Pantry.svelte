@@ -3,21 +3,45 @@
   import ingredientStore from "./Stores/ingredientStore";
   import { idAleatório } from "./Stores/ingredientStore";
 
-  let editando = false;
   let nameInput = "";
   let quantInput = "";
 
-  /*const alteraIngrediente = (evento, ingid) => {
+  const alteraQuantIngrediente = (evento, ingid) => {
     if (evento.charCode === 13) {
-      const novoNomeIngrediente = evento.target.value;
+      const novoQuantIngrediente = evento.target.value;
       const newStore = $ingredientStore.map((ing) =>
         ing.id === ingid
-          ? { id: ingid, nome: novoNomeIngrediente, editing: false }
+          ? {
+              id: ingid,
+              nome: ing.nome,
+              quant: novoQuantIngrediente,
+              editing: false,
+              quantediting: false,
+            }
           : ing
       );
       ingredientStore.set(newStore);
     }
-  };*/
+  };
+
+  const alteraIngrediente = (evento, ingid) => {
+    if (evento.charCode === 13) {
+      const novoNomeIngrediente = evento.target.value;
+      const newStore = $ingredientStore.map((ing) =>
+        ing.id === ingid
+          ? {
+              id: ingid,
+              nome: novoNomeIngrediente,
+              quant: ing.quant,
+              editing: false,
+              quantediting: false,
+            }
+          : ing
+      );
+      ingredientStore.set(newStore);
+    }
+  };
+
   const adicionarIngrediente = (nameIng, quantIng) => {
     $ingredientStore = [
       ...$ingredientStore,
@@ -26,6 +50,7 @@
         nome: nameIng,
         quant: quantIng,
         editing: false,
+        quantediting: false,
       },
     ];
     nameInput = "";
@@ -63,33 +88,65 @@
   <p>INGREDIENTES</p>
   {#each $ingredientStore as ingredient}
     {#if ingredient.editing}
-      <div class="pantry">
-        <Input
-          on:keypress={(evento) => alteraIngrediente(evento, ingredient.id)}
-          on:blur={() => (ingredient.editing = false)}
-          type="text"
-          id="add-input"
-          placeholder="Ingrediente"
-          value={ingredient.nome}
-        />
+      <div class="aux-container">
+        <div class="pantry-inner">
+          <Input
+            on:keypress={(evento) => alteraIngrediente(evento, ingredient.id)}
+            on:blur={() => (ingredient.editing = false)}
+            type="text"
+            class="edit-input"
+            placeholder="Ingrediente"
+            value={ingredient.nome}
+          />
+        </div>
+        <div class="quant-container">
+          <p>{ingredient.quant}</p>
+        </div>
+        <div class="Delet-container">
+          <button on:click={() => removeIngredient(ingredient.id)}>X</button>
+        </div>
+      </div>
+    {:else if ingredient.quantediting}
+      <div class="aux-container">
+        <div class="pantry-inner">
+          <p class="ingredient-info">
+            {ingredient.nome}
+          </p>
+        </div>
+        <div class="quant-container">
+          <Input
+            on:keypress={(evento) =>
+              alteraQuantIngrediente(evento, ingredient.id)}
+            on:blur={() => (ingredient.quantediting = false)}
+            type="number"
+            class="edit-input"
+            placeholder="Quantidade do Ingrediente"
+            value={ingredient.quant}
+          />
+        </div>
+        <div class="Delet-container">
+          <button on:click={() => removeIngredient(ingredient.id)}>X</button>
+        </div>
       </div>
     {:else}
-      <div id="aux-container">
-        <div id="pantry-inner">
+      <div class="aux-container">
+        <div class="name-container">
           <p
             class="ingredient-info"
             on:dblclick={() => (ingredient.editing = true)}
           >
             {ingredient.nome}
           </p>
+        </div>
+        <div class="quant-container">
           <p
             class="ingredient-info"
-            on:dblclick={() => (ingredient.editing = true)}
+            on:dblclick={() => (ingredient.quantediting = true)}
           >
             {ingredient.quant}
           </p>
         </div>
-        <div id="Delet-container">
+        <div class="Delet-container">
           <button on:click={() => removeIngredient(ingredient.id)}>X</button>
         </div>
       </div>
@@ -114,7 +171,7 @@
     background-color: rgba(247, 155, 102, 0.514);
   }
 
-  #aux-container {
+  .aux-container {
     display: flex;
     width: 100%;
     justify-content: center;
@@ -126,8 +183,8 @@
     border-bottom: 2px solid rgb(141, 70, 28);
   }
 
-  .pantry,
-  #pantry-inner {
+  .pantry-inner,
+  .name-container {
     display: flex;
     border-radius: 5px 0 0 5px;
     background-color: rgba(194, 102, 49, 0.651);
@@ -136,21 +193,30 @@
     width: inherit;
   }
 
-  #pantry-inner {
+  .quant-container {
+    display: flex;
+    background-color: rgba(194, 102, 49, 0.651);
+    margin: 5px 0 5px 0;
+    padding: 10px;
+    width: inherit;
+  }
+
+  .pantry-inner {
     display: flex;
     justify-content: space-between;
   }
 
-  :global(.form-control),
-  .pantry > p {
-    margin: 0;
+  :global(.edit-input.form-control) {
+    font-size: 16px;
+    margin: 16px 0;
+    padding: 0;
   }
 
-  .pantry:hover {
+  .pantry-inner:hover {
     background-color: rgb(165, 90, 47);
   }
 
-  #Delet-container {
+  .Delet-container {
     display: flex;
     justify-content: center;
     padding: 10px;
@@ -160,7 +226,7 @@
     background-color: rgba(194, 102, 49, 0.651);
   }
 
-  #Delet-container > button {
+  .Delet-container > button {
     background-color: rgba(194, 102, 49, 0.651);
   }
 
