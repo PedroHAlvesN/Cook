@@ -4,13 +4,14 @@ const recipeStore = writable([
   {
     nome: "Milho Cozido",
     ingredientes: {
-      nome: "Milho"
+      Milho: 1
     }
   },
   {
     nome: "Macarronada",
     ingredientes: {
-      nome: "Milho, Macarrão"
+      Milho: 1,
+      Macarrão: 2
     }
   }
 ]);
