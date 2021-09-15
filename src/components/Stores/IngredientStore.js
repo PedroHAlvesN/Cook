@@ -6,8 +6,8 @@ export const idAleatório = (min, max) =>
 const ingredientStore = writable([
     {
       id: idAleatório(1, 1000),
-      nome: "Milho",
-      quant: 2,
+      name: "Milho",
+      quantity: 2,
       editing: false,
       quantediting: false
     },

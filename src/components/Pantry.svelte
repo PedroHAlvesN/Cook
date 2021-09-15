@@ -7,6 +7,42 @@
   let nameInput = "";
   let quantInput = "";
 
+  const showIngredients = () =>
+    $ingredientStore
+      .map(({ name, quantity }) => `${quantity}x ${name}`)
+      .join("\n");
+
+  const showAvailableRecipes = () => {
+    // Retornar apenas receitas que sigam a condição abaixo
+    const availableRecipes = $recipeStore.filter(({ name, materials }) => {
+      for (const ingredientName in materials) {
+        const ingredientQuantity = materials[ingredientName];
+
+        // Verifica material por material de uma receita, e retorna essa receita
+        // caso hajam materiais suficientes
+        const hasEnoughMaterials = $ingredientStore.find(
+          ({ name, quantity }) =>
+            name === ingredientName && quantity >= ingredientQuantity
+        );
+
+        return hasEnoughMaterials;
+      }
+    });
+
+    const formattedRecipeList = availableRecipes.map(({ name }) => name);
+    return formattedRecipeList.join("\n");
+  };
+
+  // ##### Mostrar na tela #####
+
+  const formattedIngredients = showIngredients();
+  //console.log("Ingredients:");
+  //console.log(formattedIngredients);
+
+  const availableRecipes = showAvailableRecipes();
+  //console.log("\nAvailable recipes:");
+  //console.log(availableRecipes);
+
   const alteraQuantIngrediente = (evento, ingid) => {
     if (evento.charCode === 13) {
       const novoQuantIngrediente = evento.target.value;
@@ -14,8 +50,8 @@
         ing.id === ingid
           ? {
               id: ingid,
-              nome: ing.nome,
-              quant: novoQuantIngrediente,
+              name: ing.nome,
+              quantity: novoQuantIngrediente,
               editing: false,
               quantediting: false,
             }
@@ -32,8 +68,8 @@
         ing.id === ingid
           ? {
               id: ingid,
-              nome: novoNomeIngrediente,
-              quant: ing.quant,
+              name: novoNomeIngrediente,
+              quantity: ing.quant,
               editing: false,
               quantediting: false,
             }
@@ -44,12 +80,14 @@
   };
 
   const adicionarIngrediente = (nameIng, quantIng) => {
+    console.log(nameIng);
+    console.log(quantIng);
     $ingredientStore = [
       ...$ingredientStore,
       {
         id: idAleatório(1, 10000),
-        nome: nameIng,
-        quant: quantIng,
+        name: nameIng,
+        quantity: quantIng,
         editing: false,
         quantediting: false,
       },
@@ -157,6 +195,7 @@
   </div>
   <div id="kitchen-container">
     <p>RECEITAS</p>
+    <div>{availableRecipes}</div>
   </div>
 </div>
 
